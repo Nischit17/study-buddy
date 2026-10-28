@@ -1,3 +1,5 @@
+import { verifyToken } from "./token.js";
+
 // Prints every request that hits the server
 export function logger(req, res, next) {
   console.log(`${new Date().toLocaleTimeString()}  ${req.method}  ${req.url}`);
@@ -17,6 +19,22 @@ export function validate(schema) {
     req.body = result.data; // cleaned data: trimmed text, default subject
     next();
   };
+}
+
+// Lets the request through only with a valid "Authorization: Bearer <token>" header
+export function requireAuth(req, res, next) {
+  const header = req.headers.authorization || "";
+  const [type, token] = header.split(" ");
+  if (type !== "Bearer" || !token) {
+    return res.status(401).json({ error: "Please log in first (missing token)" });
+  }
+  try {
+    const payload = verifyToken(token);
+    req.userId = payload.userId; // routes use this to know WHO is asking
+    next();
+  } catch {
+    return res.status(401).json({ error: "Your session is invalid or expired. Please log in again." });
+  }
 }
 
 // Any route not matched
