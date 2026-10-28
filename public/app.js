@@ -1,6 +1,7 @@
 import { api, getToken, clearToken } from "./api.js";
 import { startQuiz, submitQuiz } from "./quiz.js";
 import { searchNotes } from "./search.js";
+import { loadChat, sendMessage, clearChat } from "./chat.js";
 
 // No token? Back to the login page
 if (!getToken()) window.location.href = "/";
@@ -129,13 +130,24 @@ document.querySelector("#search-form").addEventListener("submit", (event) => {
   run(() => searchNotes(query));
 });
 
+document.querySelector("#chat-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const message = new FormData(form).get("message");
+  form.reset(); // empty the box at once, like a chat app
+  run(() => sendMessage(message));
+});
+
+document.querySelector("#clear-chat").addEventListener("click", () => run(clearChat));
+
 document.querySelector("#logout-button").addEventListener("click", logout);
 
-// Page start: say hello, then load both lists
+// Page start: say hello, then load the lists and the chat
 run(async () => {
   const user = await api("/auth/me");
   document.querySelector("#user-name").textContent = `Hi, ${user.name}`;
   await loadDocuments();
   await loadNotes();
   await loadHistory();
+  await loadChat();
 });
