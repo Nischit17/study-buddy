@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Buddy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>📚 Study Buddy</h1>
+    <span id="user-name"></span>
+    <button id="logout-button" class="secondary">Log out</button>
+  </header>
+
+  <p id="message" class="message"></p>
+
+  <main class="grid">
+    <section class="card">
+      <h2>My PDFs</h2>
+      <form id="upload-form">
+        <input type="file" name="file" accept="application/pdf" required>
+        <button type="submit">Upload PDF</button>
+      </form>
+      <ul id="document-list" class="list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>My notes</h2>
+      <form id="note-form">
+        <input name="title" placeholder="Title" required>
+        <input name="subject" placeholder="Subject (optional)">
+        <textarea name="content" placeholder="Write your note..." rows="4" required></textarea>
+        <button type="submit">Add note</button>
+      </form>
+      <ul id="note-list" class="list"></ul>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

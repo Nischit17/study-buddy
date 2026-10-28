@@ -12,6 +12,7 @@ This repo grows class by class.
 | `class-02-end` | Notes stored in SQLite, `.env` config, routes/model/schema files, zod validation |
 | `class-03-end` | User accounts: register, login, bcrypt password hashing, JWT, private notes per user |
 | `class-04-end` | PDF upload with multer, text extraction with pdf-parse, documents API |
+| `class-05-end` | Website in `public/` (HTML, CSS, JavaScript fetch) served by Express: login, notes, PDF upload |
 
 ## Run it
 
@@ -20,7 +21,7 @@ Requires Node.js 22 or newer.
 ```bash
 git clone https://github.com/Nischit17/study-buddy.git checkpoint
 cd checkpoint
-git checkout class-04-end
+git checkout class-05-end
 npm install
 cp .env.example .env
 npm run dev
@@ -28,7 +29,7 @@ npm run dev
 
 On Windows Command Prompt use `copy .env.example .env` instead of `cp`. Then put your own long random value in `JWT_SECRET`.
 
-The server starts at http://localhost:3000.
+The server starts at http://localhost:3000. Open that address in your browser to use the website.
 
 ## Endpoints
 
@@ -50,3 +51,14 @@ All `/api/notes`, `/api/documents` and `/api/subjects` routes need the header `A
 | GET | `/api/documents` | List your documents (without text) |
 | GET | `/api/documents/:id` | One document with its extracted text |
 | DELETE | `/api/documents/:id` | Delete a document |
+
+## Website
+
+Express serves the files in `public/` (`app.use(express.static("public"))`), so the website and the API share one address and no CORS setup is needed.
+
+| File | Job |
+|---|---|
+| `public/index.html` + `login.js` | Log in or create an account; the token is saved in `localStorage` |
+| `public/app.html` + `app.js` | Your PDFs and notes: upload, add, delete |
+| `public/api.js` | One `api()` function that calls the backend with the token |
+| `public/style.css` | All the styling |

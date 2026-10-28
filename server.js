@@ -11,12 +11,9 @@ const PORT = process.env.PORT || 3000;
 // ---------- Middleware ----------
 app.use(express.json());
 app.use(logger);
+app.use(express.static("public")); // the website: public/index.html is served at "/"
 
 // ---------- Routes ----------
-app.get("/", (req, res) => {
-  res.send("Welcome to Study Buddy API 📚");
-});
-
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", uptimeInSeconds: Math.round(process.uptime()) });
 });
