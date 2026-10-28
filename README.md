@@ -11,6 +11,7 @@ This repo grows class by class.
 | `class-01-end` | Notes REST API (Express, in-memory data) |
 | `class-02-end` | Notes stored in SQLite, `.env` config, routes/model/schema files, zod validation |
 | `class-03-end` | User accounts: register, login, bcrypt password hashing, JWT, private notes per user |
+| `class-04-end` | PDF upload with multer, text extraction with pdf-parse, documents API |
 
 ## Run it
 
@@ -19,7 +20,7 @@ Requires Node.js 22 or newer.
 ```bash
 git clone https://github.com/Nischit17/study-buddy.git checkpoint
 cd checkpoint
-git checkout class-03-end
+git checkout class-04-end
 npm install
 cp .env.example .env
 npm run dev
@@ -31,7 +32,7 @@ The server starts at http://localhost:3000.
 
 ## Endpoints
 
-All `/api/notes` and `/api/subjects` routes need the header `Authorization: Bearer <token>`.
+All `/api/notes`, `/api/documents` and `/api/subjects` routes need the header `Authorization: Bearer <token>`.
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -45,3 +46,7 @@ All `/api/notes` and `/api/subjects` routes need the header `Authorization: Bear
 | PUT | `/api/notes/:id` | Update a note |
 | DELETE | `/api/notes/:id` | Delete a note |
 | GET | `/api/subjects` | List of unique subjects |
+| POST | `/api/documents` | Upload a PDF (form-data field `file`, max 5 MB), extracts its text |
+| GET | `/api/documents` | List your documents (without text) |
+| GET | `/api/documents/:id` | One document with its extracted text |
+| DELETE | `/api/documents/:id` | Delete a document |

@@ -29,4 +29,17 @@ db.exec(`
   )
 `);
 
+// Documents: uploaded PDFs (we keep the extracted text, not the file itself)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS documents (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    filename   TEXT NOT NULL,
+    size_bytes INTEGER NOT NULL,
+    pages      INTEGER NOT NULL,
+    text       TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  )
+`);
+
 export default db;

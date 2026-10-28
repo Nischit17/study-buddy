@@ -45,5 +45,7 @@ export function notFound(req, res) {
 // Any error thrown in a route (for example: invalid JSON in the body)
 export function errorHandler(err, req, res, next) {
   console.error("Error:", err.message);
-  res.status(err.status || 500).json({ error: err.message || "Something went wrong" });
+  // Upload problems (file too large, wrong field name) come from multer: client mistakes
+  const status = err.status || (err.name === "MulterError" ? 400 : 500);
+  res.status(status).json({ error: err.message || "Something went wrong" });
 }
