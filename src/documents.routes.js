@@ -3,6 +3,7 @@ import { findAllDocuments, findDocumentById, createDocument, deleteDocument } fr
 import { requireAuth } from "./middleware.js";
 import { uploadPdf } from "./upload.js";
 import { extractPdfText } from "./pdf.js";
+import { summariseNotes } from "./summary.js";
 
 const router = Router();
 
@@ -44,6 +45,22 @@ router.get("/:id", (req, res) => {
   const document = findDocumentById(req.userId, req.params.id);
   if (!document) return res.status(404).json(notFoundMessage(req.params.id));
   res.json(document);
+});
+
+// POST /api/documents/:id/summary   (Gemini summarises the PDF's text)
+router.post("/:id/summary", async (req, res) => {
+  const document = findDocumentById(req.userId, req.params.id);
+  if (!document) return res.status(404).json(notFoundMessage(req.params.id));
+  try {
+    const summary = await summariseNotes(document.text);
+    res.json({ id: document.id, filename: document.filename, summary });
+  } catch (error) {
+    console.error("Gemini error:", error.status, error.message);
+    if (error.status === 429) {
+      return res.status(429).json({ error: "AI limit reached. Wait a minute and try again." });
+    }
+    res.status(502).json({ error: "The AI could not answer right now. Please try again." });
+  }
 });
 
 // DELETE /api/documents/:id

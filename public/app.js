@@ -20,8 +20,8 @@ async function run(task) {
   }
 }
 
-// Fills a <ul> with one <li> per item, each with a Delete button
-function renderList(selector, items, toText, onDelete) {
+// Fills a <ul> with one <li> per item; buttons = [{ label, onClick }, ...]
+function renderList(selector, items, toText, buttons) {
   const list = document.querySelector(selector);
   list.replaceChildren(); // remove the old items
   if (items.length === 0) {
@@ -31,34 +31,56 @@ function renderList(selector, items, toText, onDelete) {
     list.append(empty);
   }
   for (const item of items) {
+    const li = document.createElement("li");
     const text = document.createElement("span");
     text.textContent = toText(item); // textContent, never innerHTML: text stays text
-    const button = document.createElement("button");
-    button.className = "secondary";
-    button.textContent = "Delete";
-    button.addEventListener("click", () => run(() => onDelete(item)));
-    const li = document.createElement("li");
-    li.append(text, button);
+    li.append(text);
+    for (const { label, onClick } of buttons) {
+      const button = document.createElement("button");
+      button.className = "secondary";
+      button.textContent = label;
+      button.addEventListener("click", () => run(() => onClick(item)));
+      li.append(button);
+    }
     list.append(li);
   }
+}
+
+async function summariseDocument(doc) {
+  const box = document.querySelector("#summary");
+  box.textContent = `Gemini is reading ${doc.filename}...`;
+  try {
+    const { summary } = await api(`/documents/${doc.id}/summary`, { method: "POST" });
+    box.textContent = summary; // AI text is user-like data: textContent, never innerHTML
+  } catch (error) {
+    box.textContent = "No summary this time.";
+    throw error; // run() shows the error message
+  }
+}
+
+async function deleteDocument(doc) {
+  await api(`/documents/${doc.id}`, { method: "DELETE" });
+  await loadDocuments();
 }
 
 async function loadDocuments() {
   const documents = await api("/documents");
   const toText = (doc) => `📄 ${doc.filename} · ${doc.pages} pages`;
-  renderList("#document-list", documents, toText, async (doc) => {
-    await api(`/documents/${doc.id}`, { method: "DELETE" });
-    await loadDocuments();
-  });
+  renderList("#document-list", documents, toText, [
+    { label: "Summarise", onClick: summariseDocument },
+    { label: "Delete", onClick: deleteDocument },
+  ]);
+}
+
+async function deleteNote(note) {
+  await api(`/notes/${note.id}`, { method: "DELETE" });
+  await loadNotes();
 }
 
 async function loadNotes() {
   const notes = await api("/notes");
   const toText = (note) => `[${note.subject}] ${note.title}`;
-  renderList("#note-list", notes, toText, async (note) => {
-    await api(`/notes/${note.id}`, { method: "DELETE" });
-    await loadNotes();
-  });
+  renderList("#note-list", notes, toText, [{ label: "Delete", onClick: deleteNote }]);
 }
 
 document.querySelector("#upload-form").addEventListener("submit", (event) => {

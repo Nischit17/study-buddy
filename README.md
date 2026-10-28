@@ -13,6 +13,7 @@ This repo grows class by class.
 | `class-03-end` | User accounts: register, login, bcrypt password hashing, JWT, private notes per user |
 | `class-04-end` | PDF upload with multer, text extraction with pdf-parse, documents API |
 | `class-05-end` | Website in `public/` (HTML, CSS, JavaScript fetch) served by Express: login, notes, PDF upload |
+| `class-06-end` | Gemini AI (Interactions API, `@google/genai`): summarise an uploaded PDF from the website |
 
 ## Run it
 
@@ -21,13 +22,13 @@ Requires Node.js 22 or newer.
 ```bash
 git clone https://github.com/Nischit17/study-buddy.git checkpoint
 cd checkpoint
-git checkout class-05-end
+git checkout class-06-end
 npm install
 cp .env.example .env
 npm run dev
 ```
 
-On Windows Command Prompt use `copy .env.example .env` instead of `cp`. Then put your own long random value in `JWT_SECRET`.
+On Windows Command Prompt use `copy .env.example .env` instead of `cp`. Then put your own long random value in `JWT_SECRET`, and your free Gemini API key from https://aistudio.google.com/apikey in `GEMINI_API_KEY`.
 
 The server starts at http://localhost:3000. Open that address in your browser to use the website.
 
@@ -50,6 +51,7 @@ All `/api/notes`, `/api/documents` and `/api/subjects` routes need the header `A
 | POST | `/api/documents` | Upload a PDF (form-data field `file`, max 5 MB), extracts its text |
 | GET | `/api/documents` | List your documents (without text) |
 | GET | `/api/documents/:id` | One document with its extracted text |
+| POST | `/api/documents/:id/summary` | AI summary of a document (Gemini) |
 | DELETE | `/api/documents/:id` | Delete a document |
 
 ## Website
