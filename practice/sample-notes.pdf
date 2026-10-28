@@ -1,0 +1,65 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 629 >>
+stream
+BT /F1 14 Tf 60 780 Td 18 TL
+(Operating Systems - Unit 3: Deadlocks) Tj T*
+() Tj T*
+(A deadlock is a situation where a set of processes are blocked,) Tj T*
+(because each process is holding a resource and waiting for) Tj T*
+(another resource held by some other process.) Tj T*
+() Tj T*
+(Four necessary conditions \(Coffman conditions\):) Tj T*
+(1. Mutual exclusion: a resource can be used by only one process.) Tj T*
+(2. Hold and wait: a process holds one resource and waits for more.) Tj T*
+(3. No preemption: a resource cannot be taken away by force.) Tj T*
+(4. Circular wait: processes wait for each other in a cycle.) Tj T*
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 552 >>
+stream
+BT /F1 14 Tf 60 780 Td 18 TL
+(Handling deadlocks) Tj T*
+() Tj T*
+(Prevention: make sure at least one condition can never hold.) Tj T*
+(Avoidance: grant a request only if the system stays in a safe state.) Tj T*
+(The Banker's algorithm is the classic avoidance algorithm.) Tj T*
+(Detection and recovery: allow deadlocks, detect them with a) Tj T*
+(wait-for graph, then recover by killing or rolling back a process.) Tj T*
+(Ignoring: many operating systems simply ignore the problem) Tj T*
+(\(the ostrich algorithm\) because deadlocks are rare.) Tj T*
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000317 00000 n 
+0000000997 00000 n 
+0000001123 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1726
+%%EOF
