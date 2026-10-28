@@ -4,6 +4,7 @@ import { z } from "zod";
 const API_KEY = process.env.GEMINI_API_KEY;
 // One or more model names, comma separated: the first is tried first
 const MODELS = (process.env.GEMINI_MODEL || "gemini-3.1-flash-lite").split(",").map((m) => m.trim());
+const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL || "gemini-embedding-001";
 
 // Stop the server at startup if the key is missing (same idea as JWT_SECRET)
 if (!API_KEY) {
@@ -43,6 +44,17 @@ export async function askGeminiJson(input, systemInstruction, schema) {
     response_format: { type: "text", mime_type: "application/json", schema: z.toJSONSchema(schema) },
   });
   return schema.parse(JSON.parse(interaction.output_text)); // never trust AI output blindly
+}
+
+// Turn texts into vectors (768 numbers each) that capture their meaning
+// taskType: "RETRIEVAL_DOCUMENT" for notes we store, "RETRIEVAL_QUERY" for a question
+export async function embedTexts(texts, taskType) {
+  const response = await ai.models.embedContent({
+    model: EMBEDDING_MODEL,
+    contents: texts,
+    config: { taskType, outputDimensionality: 768, httpOptions: { timeout: 40000 } },
+  });
+  return response.embeddings.map((embedding) => embedding.values);
 }
 
 // One place that turns any AI failure into a friendly HTTP answer

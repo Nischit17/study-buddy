@@ -73,6 +73,10 @@ legend { font-weight: 600; padding: 0 4px; }
 fieldset label { flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
 .right { color: #2f5d3a; font-weight: 600; }
 .wrong { color: #8a2a18; font-weight: 600; }
+/* ---------- Search ---------- */
+#search-results li { flex-direction: column; align-items: flex-start; gap: 4px; }
+#search-results p { margin: 0; color: #4b4744; line-height: 1.5; }
+
 .message {
   min-height: 24px;
   margin: 16px 32px;

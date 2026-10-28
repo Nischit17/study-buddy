@@ -1,5 +1,6 @@
 import { api, getToken, clearToken } from "./api.js";
 import { startQuiz, submitQuiz } from "./quiz.js";
+import { searchNotes } from "./search.js";
 
 // No token? Back to the login page
 if (!getToken()) window.location.href = "/";
@@ -120,6 +121,12 @@ document.querySelector("#quiz-form").addEventListener("submit", (event) => {
     await submitQuiz();
     await loadHistory();
   });
+});
+
+document.querySelector("#search-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const query = new FormData(event.target).get("query");
+  run(() => searchNotes(query));
 });
 
 document.querySelector("#logout-button").addEventListener("click", logout);

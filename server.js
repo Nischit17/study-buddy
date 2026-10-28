@@ -3,6 +3,7 @@ import notesRouter from "./src/notes.routes.js";
 import authRouter from "./src/auth.routes.js";
 import documentsRouter from "./src/documents.routes.js";
 import quizzesRouter from "./src/quizzes.routes.js";
+import searchRouter from "./src/search.routes.js";
 import { findAllSubjects } from "./src/notes.model.js";
 import { logger, requireAuth, notFound, errorHandler } from "./src/middleware.js";
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/notes", notesRouter);
 app.use("/api/documents", documentsRouter);
 app.use("/api/quizzes", quizzesRouter);
+app.use("/api/search", searchRouter);
 
 app.get("/api/subjects", requireAuth, (req, res) => {
   res.json(findAllSubjects(req.userId));

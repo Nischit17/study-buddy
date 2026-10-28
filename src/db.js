@@ -56,4 +56,15 @@ db.exec(`
   )
 `);
 
+// Chunks: small pieces of each PDF with their embedding (meaning as numbers)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS chunks (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    document_id INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+    position    INTEGER NOT NULL,
+    text        TEXT NOT NULL,
+    embedding   TEXT NOT NULL
+  )
+`);
+
 export default db;
