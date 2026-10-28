@@ -1,4 +1,5 @@
 import { api, getToken, clearToken } from "./api.js";
+import { startQuiz, submitQuiz } from "./quiz.js";
 
 // No token? Back to the login page
 if (!getToken()) window.location.href = "/";
@@ -68,6 +69,7 @@ async function loadDocuments() {
   const toText = (doc) => `📄 ${doc.filename} · ${doc.pages} pages`;
   renderList("#document-list", documents, toText, [
     { label: "Summarise", onClick: summariseDocument },
+    { label: "Quiz", onClick: startQuiz },
     { label: "Delete", onClick: deleteDocument },
   ]);
 }
@@ -106,6 +108,20 @@ document.querySelector("#note-form").addEventListener("submit", (event) => {
   });
 });
 
+async function loadHistory() {
+  const history = await api("/quizzes/history");
+  const toText = (quiz) => `${quiz.filename}: ${quiz.score} / ${quiz.total}`;
+  renderList("#history-list", history, toText, []);
+}
+
+document.querySelector("#quiz-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  run(async () => {
+    await submitQuiz();
+    await loadHistory();
+  });
+});
+
 document.querySelector("#logout-button").addEventListener("click", logout);
 
 // Page start: say hello, then load both lists
@@ -114,4 +130,5 @@ run(async () => {
   document.querySelector("#user-name").textContent = `Hi, ${user.name}`;
   await loadDocuments();
   await loadNotes();
+  await loadHistory();
 });

@@ -4,6 +4,7 @@ import { requireAuth } from "./middleware.js";
 import { uploadPdf } from "./upload.js";
 import { extractPdfText } from "./pdf.js";
 import { summariseNotes } from "./summary.js";
+import { sendAiError } from "./ai.js";
 
 const router = Router();
 
@@ -55,11 +56,7 @@ router.post("/:id/summary", async (req, res) => {
     const summary = await summariseNotes(document.text);
     res.json({ id: document.id, filename: document.filename, summary });
   } catch (error) {
-    console.error("Gemini error:", error.status, error.message);
-    if (error.status === 429) {
-      return res.status(429).json({ error: "AI limit reached. Wait a minute and try again." });
-    }
-    res.status(502).json({ error: "The AI could not answer right now. Please try again." });
+    sendAiError(res, error);
   }
 });
 

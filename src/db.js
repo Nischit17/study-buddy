@@ -42,4 +42,18 @@ db.exec(`
   )
 `);
 
+// Quizzes: AI-written questions (with answers) and the score once submitted
+db.exec(`
+  CREATE TABLE IF NOT EXISTS quizzes (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    document_id  INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+    questions    TEXT NOT NULL,
+    total        INTEGER NOT NULL,
+    score        INTEGER,
+    created_at   TEXT NOT NULL DEFAULT (datetime('now')),
+    submitted_at TEXT
+  )
+`);
+
 export default db;

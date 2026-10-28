@@ -14,6 +14,7 @@ This repo grows class by class.
 | `class-04-end` | PDF upload with multer, text extraction with pdf-parse, documents API |
 | `class-05-end` | Website in `public/` (HTML, CSS, JavaScript fetch) served by Express: login, notes, PDF upload |
 | `class-06-end` | Gemini AI (Interactions API, `@google/genai`): summarise an uploaded PDF from the website |
+| `class-07-end` | AI multiple-choice quizzes (structured JSON output checked with zod), server-side scoring, score history, model fallback |
 
 ## Run it
 
@@ -22,7 +23,7 @@ Requires Node.js 22 or newer.
 ```bash
 git clone https://github.com/Nischit17/study-buddy.git checkpoint
 cd checkpoint
-git checkout class-06-end
+git checkout class-07-end
 npm install
 cp .env.example .env
 npm run dev
@@ -34,7 +35,7 @@ The server starts at http://localhost:3000. Open that address in your browser to
 
 ## Endpoints
 
-All `/api/notes`, `/api/documents` and `/api/subjects` routes need the header `Authorization: Bearer <token>`.
+All `/api/notes`, `/api/documents`, `/api/quizzes` and `/api/subjects` routes need the header `Authorization: Bearer <token>`.
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -53,6 +54,9 @@ All `/api/notes`, `/api/documents` and `/api/subjects` routes need the header `A
 | GET | `/api/documents/:id` | One document with its extracted text |
 | POST | `/api/documents/:id/summary` | AI summary of a document (Gemini) |
 | DELETE | `/api/documents/:id` | Delete a document |
+| POST | `/api/quizzes` | New AI quiz from a document (`documentId`, optional `count` 3–10) |
+| POST | `/api/quizzes/:id/submit` | Submit `answers` (option numbers, `null` = skipped), get score and explanations |
+| GET | `/api/quizzes/history` | Your submitted quizzes with scores |
 
 ## Website
 

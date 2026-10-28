@@ -1,5 +1,6 @@
 /* ---------- Base ---------- */
 * { box-sizing: border-box; }
+[hidden] { display: none; } /* stronger than "form { display: flex }" below */
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
@@ -59,6 +60,19 @@ summary { margin: 8px 0 16px; cursor: pointer; }
 .list li span { flex: 1; }
 .muted { color: #8c8580; }
 .summary { white-space: pre-wrap; line-height: 1.6; } /* keep the AI's line breaks */
+
+/* ---------- Quiz ---------- */
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #ece7e3;
+  border-radius: 8px;
+}
+legend { font-weight: 600; padding: 0 4px; }
+fieldset label { flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
+.right { color: #2f5d3a; font-weight: 600; }
+.wrong { color: #8a2a18; font-weight: 600; }
 .message {
   min-height: 24px;
   margin: 16px 32px;
