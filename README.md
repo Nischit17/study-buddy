@@ -17,6 +17,7 @@ This repo grows class by class.
 | `class-07-end` | AI multiple-choice quizzes (structured JSON output checked with zod), server-side scoring, score history, model fallback |
 | `class-08-end` | Search by meaning: PDFs split into chunks, Gemini embeddings, cosine similarity |
 | `class-09-end` | Chat with your notes (RAG): answers only from your PDFs, with numbered sources and chat history |
+| `class-10-end` | Ready to deploy: starts without a `.env` file (variables come from the host), Node 22 pinned |
 
 ## Run it
 
@@ -25,7 +26,7 @@ Requires Node.js 22 or newer.
 ```bash
 git clone https://github.com/Nischit17/study-buddy.git checkpoint
 cd checkpoint
-git checkout class-09-end
+git checkout class-10-end
 npm install
 cp .env.example .env
 npm run dev
@@ -34,6 +35,16 @@ npm run dev
 On Windows Command Prompt use `copy .env.example .env` instead of `cp`. Then put your own long random value in `JWT_SECRET`, and your free Gemini API key from https://aistudio.google.com/apikey in `GEMINI_API_KEY`.
 
 The server starts at http://localhost:3000. Open that address in your browser to use the website.
+
+## Deploy (Render free web service)
+
+1. Push the repository to GitHub (`.env` and `*.db` are in `.gitignore`).
+2. On render.com: **New > Web Service**, connect the repository.
+3. Language **Node**, Build Command `npm install`, Start Command `npm start`, instance type **Free**.
+4. Under **Advanced**, add environment variables: `JWT_SECRET`, `GEMINI_API_KEY`, `GEMINI_MODEL`, `EMBEDDING_MODEL`. Do not set `PORT`: Render sets it.
+5. Click **Create Web Service** and open the `onrender.com` link when the deploy is live.
+
+On the free plan the service sleeps after 15 minutes without visitors (the next visit waits about a minute), and the SQLite file is reset on every restart, sleep or redeploy, so accounts, PDFs and chats are temporary.
 
 ## Endpoints
 
