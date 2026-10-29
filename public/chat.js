@@ -11,7 +11,8 @@ function messageItem({ role, content, sources = [] }) {
   item.append(text);
   if (sources.length > 0) {
     const list = document.createElement("small");
-    list.textContent = `Sources: ${sources.map((source) => `[${source.number}] ${source.filename}`).join(", ")}`;
+    const names = sources.map((source) => `[${source.number}] ${source.filename}`);
+    list.textContent = `Sources: ${names.join(", ")}`;
     item.append(list);
   }
   return item;

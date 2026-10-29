@@ -12,7 +12,7 @@ Rules:
 - After each fact, write the number of its source in square brackets, like [1] or [2].
 - Keep the answer under 150 words. Plain text, no Markdown.`;
 
-// R of RAG: find the best chunks; a follow-up ("what about its conditions?") also uses the last question
+// R of RAG: find the best chunks (a weak follow-up is searched again with the last question)
 async function findSources(userId, question, history) {
   let chunks = await searchNotes(userId, question, 5);
   const lastQuestion = history.findLast((message) => message.role === "user")?.content;
@@ -27,11 +27,15 @@ export async function answerQuestion(userId, question, history) {
   const sources = await findSources(userId, question, history);
   if (sources.length === 0) return { answer: NOT_FOUND, sources: [] }; // no AI call: nothing to answer from
 
-  const sourceText = sources.map((source, i) => `[${i + 1}] (${source.filename}) ${source.text}`).join("\n\n");
+  const sourceText = sources
+    .map((source, i) => `[${i + 1}] (${source.filename}) ${source.text}`)
+    .join("\n\n");
   const conversation = history
     .map((message) => `${message.role === "user" ? "Student" : "Study Buddy"}: ${message.content}`)
     .join("\n");
-  const input = `Sources:\n"""\n${sourceText}\n"""\n\nConversation so far:\n${conversation || "(none)"}\n\nStudent: ${question}`;
+  const input =
+    `Sources:\n"""\n${sourceText}\n"""\n\n` +
+    `Conversation so far:\n${conversation || "(none)"}\n\nStudent: ${question}`;
   const answer = await askGemini(input, CHAT_INSTRUCTION);
   return {
     answer,
