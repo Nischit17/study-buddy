@@ -5,7 +5,7 @@ const EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 // Stop the server at startup if the secret is missing, instead of failing later
 if (!SECRET) {
-  throw new Error("JWT_SECRET is missing. Add it to your .env file.");
+  throw new Error("JWT_SECRET is missing. Add it to .env (on a host: to its environment variables).");
 }
 
 // Create a signed token that says "this request comes from user <id>"

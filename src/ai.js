@@ -8,7 +8,7 @@ const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL || "gemini-embedding-001";
 
 // Stop the server at startup if the key is missing (same idea as JWT_SECRET)
 if (!API_KEY) {
-  throw new Error("GEMINI_API_KEY is missing. Add it to your .env file.");
+  throw new Error("GEMINI_API_KEY is missing. Add it to .env (on a host: to its environment variables).");
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
