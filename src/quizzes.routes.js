@@ -5,6 +5,7 @@ import { findDocumentById } from "./documents.model.js";
 import { validate, requireAuth } from "./middleware.js";
 import { generateQuiz } from "./quiz.js";
 import { sendAiError } from "./ai.js";
+import { aiLimit } from "./rate-limit.js";
 
 const router = Router();
 router.use(requireAuth);
@@ -15,7 +16,7 @@ router.get("/history", (req, res) => {
 });
 
 // POST /api/quizzes   { "documentId": 1, "count": 5 }
-router.post("/", validate(createQuizSchema), async (req, res) => {
+router.post("/", validate(createQuizSchema), aiLimit, async (req, res) => {
   const { documentId, count } = req.body;
   const document = findDocumentById(req.userId, documentId);
   if (!document) return res.status(404).json({ error: `Document with id ${documentId} not found` });

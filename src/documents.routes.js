@@ -5,6 +5,7 @@ import { uploadPdf } from "./upload.js";
 import { extractPdfText } from "./pdf.js";
 import { summariseNotes } from "./summary.js";
 import { sendAiError } from "./ai.js";
+import { aiLimit } from "./rate-limit.js";
 
 const router = Router();
 
@@ -49,7 +50,7 @@ router.get("/:id", (req, res) => {
 });
 
 // POST /api/documents/:id/summary   (Gemini summarises the PDF's text)
-router.post("/:id/summary", async (req, res) => {
+router.post("/:id/summary", aiLimit, async (req, res) => {
   const document = findDocumentById(req.userId, req.params.id);
   if (!document) return res.status(404).json(notFoundMessage(req.params.id));
   try {

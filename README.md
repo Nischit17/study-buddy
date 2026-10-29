@@ -17,7 +17,7 @@ This repo grows class by class.
 | `class-07-end` | AI multiple-choice quizzes (structured JSON output checked with zod), server-side scoring, score history, model fallback |
 | `class-08-end` | Search by meaning: PDFs split into chunks, Gemini embeddings, cosine similarity |
 | `class-09-end` | Chat with your notes (RAG): answers only from your PDFs, with numbered sources and chat history |
-| `class-10-end` | Ready to deploy: starts without a `.env` file (variables come from the host), Node 22 pinned |
+| `class-10-end` | Ready to deploy: starts without a `.env` file, Node 22 pinned, a spinner on busy buttons, AI rate limit (10 requests per minute per user) |
 
 ## Run it
 
@@ -47,6 +47,8 @@ The server starts at http://localhost:3000. Open that address in your browser to
 On the free plan the service sleeps after 15 minutes without visitors (the next visit waits about a minute), and the SQLite file is reset on every restart, sleep or redeploy, so accounts, PDFs and chats are temporary.
 
 ## Endpoints
+
+AI routes (summary, new quiz, search, chat) share a limit of 10 requests per minute per user; after that they answer `429` with a `Retry-After` header.
 
 All `/api/notes`, `/api/documents`, `/api/quizzes`, `/api/search`, `/api/chat` and `/api/subjects` routes need the header `Authorization: Bearer <token>`.
 

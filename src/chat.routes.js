@@ -4,6 +4,7 @@ import { chatSchema } from "./chat.schema.js";
 import { answerQuestion } from "./chat.js";
 import { saveMessage, findRecentMessages, deleteMessages } from "./messages.model.js";
 import { sendAiError } from "./ai.js";
+import { aiLimit } from "./rate-limit.js";
 
 // How many earlier messages Gemini sees (3 questions + 3 answers)
 const HISTORY_SIZE = 6;
@@ -17,7 +18,7 @@ router.get("/", (req, res) => {
 });
 
 // POST /api/chat   { "message": "..." }
-router.post("/", validate(chatSchema), async (req, res) => {
+router.post("/", validate(chatSchema), aiLimit, async (req, res) => {
   const { message } = req.body;
   try {
     const history = findRecentMessages(req.userId, HISTORY_SIZE);

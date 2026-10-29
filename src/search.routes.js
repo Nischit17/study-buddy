@@ -3,12 +3,13 @@ import { validate, requireAuth } from "./middleware.js";
 import { searchSchema } from "./search.schema.js";
 import { searchNotes } from "./search.js";
 import { sendAiError } from "./ai.js";
+import { aiLimit } from "./rate-limit.js";
 
 const router = Router();
 router.use(requireAuth);
 
 // POST /api/search   { "query": "processes waiting forever", "limit": 5 }
-router.post("/", validate(searchSchema), async (req, res) => {
+router.post("/", validate(searchSchema), aiLimit, async (req, res) => {
   const { query, limit } = req.body;
   try {
     const results = await searchNotes(req.userId, query, limit);
