@@ -13,13 +13,23 @@ function logout() {
   window.location.href = "/";
 }
 
-// Runs a task and shows any error; an expired token (401) logs you out
-async function run(task) {
+// Runs a task and shows any error; an expired token (401) logs you out.
+// The clicked button shows a spinner and cannot be clicked again until the task ends.
+async function run(task, button) {
+  if (button) {
+    button.disabled = true;
+    button.classList.add("loading");
+  }
   try {
     await task();
   } catch (error) {
     if (error.status === 401) return logout();
     message.textContent = error.message;
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.classList.remove("loading");
+    }
   }
 }
 
@@ -42,7 +52,7 @@ function renderList(selector, items, toText, buttons) {
       const button = document.createElement("button");
       button.className = "secondary";
       button.textContent = label;
-      button.addEventListener("click", () => run(() => onClick(item)));
+      button.addEventListener("click", () => run(() => onClick(item), button));
       li.append(button);
     }
     list.append(li);
@@ -96,7 +106,7 @@ document.querySelector("#upload-form").addEventListener("submit", (event) => {
     message.textContent = `Uploaded ${doc.filename}: ${doc.characters} characters of text found`;
     form.reset();
     await loadDocuments();
-  });
+  }, event.submitter);
 });
 
 document.querySelector("#note-form").addEventListener("submit", (event) => {
@@ -107,7 +117,7 @@ document.querySelector("#note-form").addEventListener("submit", (event) => {
     message.textContent = "Note saved";
     form.reset();
     await loadNotes();
-  });
+  }, event.submitter);
 });
 
 async function loadHistory() {
@@ -121,13 +131,13 @@ document.querySelector("#quiz-form").addEventListener("submit", (event) => {
   run(async () => {
     await submitQuiz();
     await loadHistory();
-  });
+  }, event.submitter);
 });
 
 document.querySelector("#search-form").addEventListener("submit", (event) => {
   event.preventDefault();
   const query = new FormData(event.target).get("query");
-  run(() => searchNotes(query));
+  run(() => searchNotes(query), event.submitter);
 });
 
 document.querySelector("#chat-form").addEventListener("submit", (event) => {
@@ -135,10 +145,12 @@ document.querySelector("#chat-form").addEventListener("submit", (event) => {
   const form = event.target;
   const message = new FormData(form).get("message");
   form.reset(); // empty the box at once, like a chat app
-  run(() => sendMessage(message));
+  run(() => sendMessage(message), event.submitter);
 });
 
-document.querySelector("#clear-chat").addEventListener("click", () => run(clearChat));
+document.querySelector("#clear-chat").addEventListener("click", (event) => {
+  run(clearChat, event.currentTarget);
+});
 
 document.querySelector("#logout-button").addEventListener("click", logout);
 
